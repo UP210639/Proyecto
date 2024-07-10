@@ -19,8 +19,12 @@ public class ProjectService {
     }
 
     
+    
     public List<Project> getProjects() {
         return projectRepository.findAll();
     }
     
+    public Project createProject(Project newProject){
+        return projectRepository.save(newProject);
+    }
 }

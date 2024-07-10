@@ -22,26 +22,23 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id de tarea
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    //@ManyToOne
+    //@JoinColumn(name = "user_id")
+    @Column(name = "user_id")
+    private Integer user;
+    //private User user;
 
     private String name;
-
     private String description;
+    private String staus;
 
     @Column(name = "created_at")
     private LocalDateTime dateAdd;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project; // Cambiado a Project
+    //@ManyToOne
+    //@JoinColumn(name = "project_id")
+    @Column(name = "project_id")
+    private Integer project;
+   // private Project project; // Cambiado a Project
 
-    /*@Column(name = "start_date")
-    private LocalDateTime startDate;
-
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
-
-    private LocalDateTime deadline;*/
 }
