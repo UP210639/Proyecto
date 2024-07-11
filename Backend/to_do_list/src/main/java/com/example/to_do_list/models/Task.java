@@ -30,7 +30,7 @@ public class Task {
 
     private String name;
     private String description;
-    private String staus;
+    private String status;
 
     @Column(name = "created_at")
     private LocalDateTime dateAdd;

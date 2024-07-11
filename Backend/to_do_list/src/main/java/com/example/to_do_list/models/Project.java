@@ -27,9 +27,8 @@ public class Project {
     @Column(name ="created_at")
     private LocalDateTime dateAdd;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Integer user;
 
 
 }

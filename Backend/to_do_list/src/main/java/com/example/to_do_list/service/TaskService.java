@@ -30,12 +30,12 @@ public class TaskService {
         System.out.println(taskDetails.getName());
 
         return taskRepository.findById(id).map(task -> {
-           
             task.setUser(taskDetails.getUser());
             task.setName(taskDetails.getName());
             task.setDescription(taskDetails.getDescription());
             task.setDateAdd(taskDetails.getDateAdd());
             task.setProject(taskDetails.getProject());
+            task.setStatus(taskDetails.getStatus());
             return taskRepository.save(task);
 
         }).orElseGet(() -> {
@@ -48,4 +48,7 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    public Task getTasksByID(Integer id) {
+        return taskRepository.findById(id).orElse(null);
+    }
 }

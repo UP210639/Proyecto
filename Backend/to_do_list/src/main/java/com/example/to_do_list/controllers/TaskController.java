@@ -55,6 +55,15 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/getByID/{id}")
+    public ResponseEntity<Task> getidTask(@PathVariable Integer id) {
+        Task task = taskService.getTasksByID(id);
+        if (task == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(task);
+    }
 }
     
 
