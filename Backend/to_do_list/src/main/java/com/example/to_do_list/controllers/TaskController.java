@@ -10,10 +10,9 @@ import com.example.to_do_list.models.Task;
 import com.example.to_do_list.service.TaskService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-<<<<<<< Updated upstream
+
 import org.springframework.web.bind.annotation.DeleteMapping;
-=======
->>>>>>> Stashed changes
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,12 +38,13 @@ public class TaskController {
         return taskService.getTasks();
     }
 
-<<<<<<< Updated upstream
+
    @PutMapping("/update/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Integer id, @RequestBody Task taskDetails) {
         Task updatedTask = taskService.update(id, taskDetails);
         System.out.println(taskDetails.getName());
-=======
+    }
+    
     @GetMapping("/getByID/{id}")
     public ResponseEntity<Task> getidTask(@PathVariable Integer id) {
         Task task = taskService.getTasksByID(id);
@@ -53,46 +53,18 @@ public class TaskController {
         }
         return ResponseEntity.ok(task);
     }
-
-    
-   @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Integer id, @RequestBody Task taskDetails) {
-        Task updatedTask = taskService.update(id, taskDetails);
->>>>>>> Stashed changes
-        return ResponseEntity.ok(updatedTask);
-    }
-    
 
     @PostMapping("/create")
     public ResponseEntity<Task> postCreateTask(@RequestBody Task task) {
         Task newTask = taskService.creatTask(task);
         return ResponseEntity.ok(newTask);
     }
-<<<<<<< Updated upstream
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Integer id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
-<<<<<<< Updated upstream
 
-    @GetMapping("/getByID/{id}")
-    public ResponseEntity<Task> getidTask(@PathVariable Integer id) {
-        Task task = taskService.getTasksByID(id);
-        if (task == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(task);
-    }
-=======
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 }
-    
-
-    
-    
-    
 
