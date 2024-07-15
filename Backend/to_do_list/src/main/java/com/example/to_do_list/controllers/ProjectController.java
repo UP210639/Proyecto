@@ -14,7 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.to_do_list.models.Project;
+
 import com.example.to_do_list.models.Task;
+
+
+import com.example.to_do_list.models.Task;
+import com.example.to_do_list.models.User;
 import com.example.to_do_list.service.ProjectService;
 import com.example.to_do_list.service.TaskService;
 
@@ -71,6 +76,5 @@ public class ProjectController {
 //
     //    return ResponseEntity.ok(project);
     //}
-}
 
- 
+}

@@ -7,17 +7,22 @@ import org.springframework.stereotype.Service;
 
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.repository.UserRepository;
+
 @Service
 public class UserService {
+    
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository){
-        this.userRepository=userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
+    public User getUserByID(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }

@@ -40,6 +40,14 @@ public class TaskController {
         return taskService.getTasksByProjectId(id);
     }
     
+    @GetMapping("/getByID/{id}")
+    public ResponseEntity<Task> getidTask(@PathVariable Integer id) {
+        Task task = taskService.getTasksByID(id);
+        if (task == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(task);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<TaskDTO> updateTask(@PathVariable Integer id, @RequestBody TaskDTO taskDTO) {

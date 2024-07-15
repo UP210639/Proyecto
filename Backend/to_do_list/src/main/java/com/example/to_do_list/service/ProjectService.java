@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.to_do_list.models.Project;
+
+import com.example.to_do_list.models.Task;
+
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.repository.ProjectReposotory;
 
@@ -24,10 +27,10 @@ public class ProjectService {
         return projectRepository.findAll();
     }
     
+
     public Project createProject(Project newProject){
         return projectRepository.save(newProject);
     }
-    
     public Project getProjectByID(Integer id) {
         return projectRepository.findById(id).orElse(null);
     }
