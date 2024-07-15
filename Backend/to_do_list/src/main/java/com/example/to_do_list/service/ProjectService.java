@@ -39,7 +39,7 @@ public class ProjectService {
             project.setUser(projectDetails.getUser());
             project.setName(projectDetails.getName());
             project.setDescription(projectDetails.getDescription());
-            project.setDateAdd(projectDetails.getDateAdd());
+      //      project.setDateAdd(projectDetails.getDateAdd());
             return projectRepository.save(project);
         }).orElseGet(() -> {
             projectDetails.setId(id);

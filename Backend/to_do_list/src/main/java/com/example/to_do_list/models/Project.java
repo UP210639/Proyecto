@@ -1,34 +1,40 @@
 package com.example.to_do_list.models;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
-@Table (name ="projects")//tabla en la base de datos
+@Table(name = "projects")
 public class Project {
+
     @Id
-    @Column(name ="project_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; //id de tarea
+    @Column(name = "project_id")
+    private Integer id;
 
-    public String name ;
-    public String description;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name ="created_at")
-    private LocalDateTime dateAdd;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "user_id")
-    private Integer user;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime dateAdd = LocalDateTime.now();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;
+
+    public Project() {
+    }
+
+    public Project(Integer id) {
+        this.id = id;
+    }
 }
