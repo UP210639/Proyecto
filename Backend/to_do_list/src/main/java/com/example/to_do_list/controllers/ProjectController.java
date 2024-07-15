@@ -14,7 +14,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.to_do_list.models.Project;
+<<<<<<< Updated upstream
 import com.example.to_do_list.models.Task;
+=======
+<<<<<<< Updated upstream
+ 
+=======
+import com.example.to_do_list.models.Task;
+import com.example.to_do_list.models.User;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 import com.example.to_do_list.service.ProjectService;
 import com.example.to_do_list.service.TaskService;
 
@@ -34,6 +43,7 @@ public class ProjectController {
          return projectService.getProjects();
     }
 
+<<<<<<< Updated upstream
     @PostMapping({"/create"})
     public ResponseEntity<Project> createProject(@RequestBody Project project) {
         Project newProject = projectService.createProject(project);
@@ -71,6 +81,16 @@ public class ProjectController {
 //
     //    return ResponseEntity.ok(project);
     //}
+=======
+    @GetMapping("/getByID/{id}")
+    public ResponseEntity<Project> getProjectId(@PathVariable Integer id) {
+        Project project = userService.getUserByID(id);
+        if (project == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(project);
+    }
+>>>>>>> Stashed changes
 }
 
  

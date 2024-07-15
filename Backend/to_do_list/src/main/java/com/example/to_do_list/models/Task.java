@@ -22,11 +22,16 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // id de tarea
 
+<<<<<<< Updated upstream
     //@ManyToOne
     //@JoinColumn(name = "user_id")
     @Column(name = "user_id")
     private Integer user;
     //private User user;
+=======
+    @JoinColumn(name = "user_id")
+    private User user;
+>>>>>>> Stashed changes
 
     private String name;
     private String description;
@@ -35,10 +40,15 @@ public class Task {
     @Column(name = "created_at")
     private LocalDateTime dateAdd;
 
+<<<<<<< Updated upstream
     //@ManyToOne
     //@JoinColumn(name = "project_id")
     @Column(name = "project_id")
     private Integer project;
    // private Project project; // Cambiado a Project
+=======
+    @JoinColumn(name = "project_id")
+    private Project project; // Cambiado a Project
+>>>>>>> Stashed changes
 
 }

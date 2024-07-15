@@ -18,18 +18,37 @@ public class TaskService {
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     public List<Task> getTasks() {
         return taskRepository.findAll();
     }
 
+<<<<<<< Updated upstream
+=======
+    public Task getTasksByID(Integer id) {
+        return taskRepository.findById(id).orElse(null);
+    }
+
+>>>>>>> Stashed changes
     public Task creatTask(Task newTask){
         return taskRepository.save(newTask);
     }
 
     public Task update(Integer id, Task taskDetails) {
+<<<<<<< Updated upstream
         System.out.println(taskDetails.getName());
 
         return taskRepository.findById(id).map(task -> {
+<<<<<<< Updated upstream
+=======
+           
+=======
+        return taskRepository.findById(id).map(task -> {
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             task.setUser(taskDetails.getUser());
             task.setName(taskDetails.getName());
             task.setDescription(taskDetails.getDescription());
@@ -37,18 +56,27 @@ public class TaskService {
             task.setProject(taskDetails.getProject());
             task.setStatus(taskDetails.getStatus());
             return taskRepository.save(task);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         }).orElseGet(() -> {
             taskDetails.setId(id);
             return taskRepository.save(taskDetails);
         });
     }
+<<<<<<< Updated upstream
 
     public void deleteTask(Integer id) {         
         taskRepository.deleteById(id);
     }
 
+<<<<<<< Updated upstream
     public Task getTasksByID(Integer id) {
         return taskRepository.findById(id).orElse(null);
     }
+=======
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 }
