@@ -43,6 +43,7 @@ public class TaskController {
     public ResponseEntity<Task> updateTask(@PathVariable Integer id, @RequestBody Task taskDetails) {
         Task updatedTask = taskService.update(id, taskDetails);
         System.out.println(taskDetails.getName());
+        return ResponseEntity.ok(updatedTask);
     }
     
     @GetMapping("/getByID/{id}")
