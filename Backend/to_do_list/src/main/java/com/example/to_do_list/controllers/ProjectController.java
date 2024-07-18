@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
+import com.example.to_do_list.dtos.TaskDTO;
 import com.example.to_do_list.models.Project;
 
 import com.example.to_do_list.models.Task;
@@ -28,21 +29,32 @@ import com.example.to_do_list.service.TaskService;
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
-    private final ProjectService projectService;
+    
+    @Autowired
+    private ProjectService projectService;
 
-    public ProjectController(ProjectService projectService){
-        this.projectService=projectService;
+    @GetMapping
+    public List<ProjectDTO> getAllProjects() {
+        return projectService.getAllProjects();
     }
 
-    @GetMapping({"/get"})
-    public List<Project> getMethodName() {
-         return projectService.getProjects();
+    @GetMapping("/{id}")
+    public ResponseEntity<ProjectDTO> getTaskById(@PathVariable Integer id) {
+        TaskDTO projectDTO = projectService.getTaskById(id);
+        if (projectDTO != null) {
+            return ResponseEntity.ok(projectDTO);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PostMapping({"/create"})
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        Project newProject = projectService.createProject(project);
-        return ResponseEntity.ok(newProject);
+    @PostMapping
+    public ProjectDTO createProject(@RequestBody projectDTO projectDTO) {
+        return projectService.createTask(projectDTO);
+    }
+
+    @GetMapping("/user/{id}")
+    public List<ProjectDTO> getProjecctByUserId(@PathVariable Integer id) {
+        return projectService.getProjecctByUserId(id);
     }
 
     @GetMapping("/getByID/{id}")
@@ -54,27 +66,20 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
 
-    
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Project> updatedProject(@PathVariable Integer id, @RequestBody Project projectDetails) {
-        Project updatedProject = projectService.update(id, projectDetails);
-        System.out.println(projectDetails.getName());
-        return ResponseEntity.ok(updatedProject);
+    @PutMapping("/{id}")
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody PorjectDTO projectDTO) {
+        TaskDTO updatedProject = projectService.updateProject(id, projectDTO);
+        if (updatedProject != null) {
+            return ResponseEntity.ok(updatedProject);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletePeoject(@PathVariable Integer id) {
-        projectService.deleteProject(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProject(@PathVariable Integer id) {
+        if (projectService.deleteProject(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
-
-    //@PostMapping({"/create"})
-    //@ResponseBody
-    //public ResponseEntity<Project>  createCliente(@RequestBody  Project project) {
-    //    System.out.println(project);
-    //    
-//
-    //    return ResponseEntity.ok(project);
-    //}
-
 }
