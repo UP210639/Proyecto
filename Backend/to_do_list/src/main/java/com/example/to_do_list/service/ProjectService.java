@@ -1,24 +1,18 @@
 package com.example.to_do_list.service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.to_do_list.dtos.ProjectDTO;
 import com.example.to_do_list.dtos.TaskDTO;
 import com.example.to_do_list.models.Project;
-
 import com.example.to_do_list.models.Task;
-
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.repository.ProjectReposotory;
 
 @Service
 public class ProjectService {
-
     @Autowired
     private ProjectReposotory projectRepository;
 

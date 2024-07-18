@@ -11,8 +11,5 @@ import com.example.to_do_list.models.Task;
 
 public interface ProjectReposotory extends JpaRepository<Project ,Integer> {
    @Query(value="Select * from projects where user_id = ?1", nativeQuery = true)
-    List<Task> findByUserId(Integer userId);
-
-   
-
+    List<Project> findByUserId(Integer userId);
 }

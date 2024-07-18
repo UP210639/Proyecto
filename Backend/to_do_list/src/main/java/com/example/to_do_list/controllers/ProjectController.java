@@ -1,35 +1,25 @@
 package com.example.to_do_list.controllers;
-
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
-
 import com.example.to_do_list.dtos.TaskDTO;
 import com.example.to_do_list.models.Project;
-
 import com.example.to_do_list.models.Task;
-
-
 import com.example.to_do_list.models.Task;
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.service.ProjectService;
 import com.example.to_do_list.service.TaskService;
 
-//import jakarta.xml.bind.PropertyException;
-
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
-    
     @Autowired
     private ProjectService projectService;
 

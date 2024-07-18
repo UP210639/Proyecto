@@ -1,5 +1,4 @@
 package com.example.to_do_list.models;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -9,7 +8,6 @@ import java.util.List;
 @Entity
 @Table(name = "projects")
 public class Project {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
