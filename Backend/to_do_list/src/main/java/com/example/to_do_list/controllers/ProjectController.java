@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.to_do_list.dtos.ProjectDTO;
 import com.example.to_do_list.dtos.TaskDTO;
 import com.example.to_do_list.models.Project;
-import com.example.to_do_list.models.Task;
 import com.example.to_do_list.models.Task;
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.service.ProjectService;
@@ -38,7 +39,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ProjectDTO createProject(@RequestBody projectDTO projectDTO) {
+    public ProjectDTO createProject(@RequestBody ProjectDTO projectDTO) {
         return projectService.createTask(projectDTO);
     }
 
@@ -57,7 +58,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody PorjectDTO projectDTO) {
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) {
         TaskDTO updatedProject = projectService.updateProject(id, projectDTO);
         if (updatedProject != null) {
             return ResponseEntity.ok(updatedProject);

@@ -20,7 +20,7 @@ public class ProjectService {
         return projectRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public ProectDTO getProjectById(Integer id) {
+    public ProjectDTO getProjectById(Integer id) {
         Optional<Project> project = projectRepository.findById(id);
         return project.map(this::convertToDTO).orElse(null);
     }
