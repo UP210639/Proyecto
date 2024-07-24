@@ -10,5 +10,5 @@ public class ProjectDTO {
     private String name;
     private String description;
     private LocalDateTime dateAdd;
-    private Integer usertId;
+    private Integer userId;
 }

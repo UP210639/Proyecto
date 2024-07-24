@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.to_do_list.dtos.TaskDTO;
+import com.example.to_do_list.dtos.ProjectDTO;
 import com.example.to_do_list.models.Project;
-
-import com.example.to_do_list.models.Task;
 
 
 import com.example.to_do_list.models.Task;
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.service.ProjectService;
 import com.example.to_do_list.service.TaskService;
-
+import org.springframework.beans.factory.annotation.Autowired;
 //import jakarta.xml.bind.PropertyException;
 
 @RestController
@@ -35,12 +34,12 @@ public class ProjectController {
 
     @GetMapping
     public List<ProjectDTO> getAllProjects() {
-        return projectService.getAllProjects();
+        return projectService.getProjects();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> getTaskById(@PathVariable Integer id) {
-        TaskDTO projectDTO = projectService.getTaskById(id);
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Integer id) {
+        ProjectDTO projectDTO = projectService.getProjectById(id);
         if (projectDTO != null) {
             return ResponseEntity.ok(projectDTO);
         }
@@ -48,18 +47,18 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ProjectDTO createProject(@RequestBody projectDTO projectDTO) {
-        return projectService.createTask(projectDTO);
+    public ProjectDTO createProject(@RequestBody ProjectDTO projectDTO) {
+        return projectService.createProject(projectDTO);
     }
 
     @GetMapping("/user/{id}")
-    public List<ProjectDTO> getProjecctByUserId(@PathVariable Integer id) {
-        return projectService.getProjecctByUserId(id);
+    public List<ProjectDTO> getProjecctByUserID(@PathVariable Integer id) {
+        return projectService.getProjectByUserId(id);
     }
 
     @GetMapping("/getByID/{id}")
     public ResponseEntity<Project> getProjectId(@PathVariable Integer id) {
-        Project project = projectService.getProjectByID(id);
+        Project project = projectService.getProjectById(id);
         if (project == null) {
             return ResponseEntity.notFound().build();
         }
@@ -67,8 +66,8 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody PorjectDTO projectDTO) {
-        TaskDTO updatedProject = projectService.updateProject(id, projectDTO);
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) {
+        ProjectDTO updatedProject = projectService.updateProject(id, projectDTO);
         if (updatedProject != null) {
             return ResponseEntity.ok(updatedProject);
         }
@@ -77,7 +76,7 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Integer id) {
-        if (projectService.deleteProject(id)) {
+        if (projectService.deleteProjecct(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

@@ -5,6 +5,7 @@ import com.example.to_do_list.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.to_do_list.models.Task;
 
 import java.util.List;
 
@@ -41,12 +42,12 @@ public class TaskController {
     }
     
     @GetMapping("/getByID/{id}")
-    public ResponseEntity<Task> getidTask(@PathVariable Integer id) {
-        Task task = taskService.getTasksByID(id);
-        if (task == null) {
+    public ResponseEntity<TaskDTO> getidTask(@PathVariable Integer id) {
+        TaskDTO taskDTO = taskService.getTaskById(id);
+        if (taskDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(task);
+        return ResponseEntity.ok(taskDTO);
     }
 
     @PutMapping("/{id}")

@@ -22,18 +22,18 @@ public class ProjectService {
     @Autowired
     private ProjectReposotory projectRepository;
 
-    public List<Project> getProjects() {
+    public List<ProjectDTO> getProjects() {
         return projectRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public ProectDTO getProjectById(Integer id) {
+    public ProjectDTO getProjectById(Integer id) {
         Optional<Project> project = projectRepository.findById(id);
         return project.map(this::convertToDTO).orElse(null);
     }
 
     public ProjectDTO createProject(ProjectDTO projectDTO) {
         Project project = convertToEntity(projectDTO);
-        task = projectRepository.save(project);
+        project = projectRepository.save(project);
         return convertToDTO(project);
     }
 
@@ -44,8 +44,8 @@ public class ProjectService {
             project.setName(projectDTO.getName());
             project.setDescription(projectDTO.getDescription());
             project.setDateAdd(projectDTO.getDateAdd());
-            project.setUser(new User(projectkDTO.getUserId()));
-            project = taskRepository.save(project);
+            project.setUser(new User(projectDTO.getUserId()));
+            project = projectRepository.save(project);
             return convertToDTO(project);
         }
         return null;
@@ -60,7 +60,7 @@ public class ProjectService {
     }
 
     public List<ProjectDTO> getProjectByUserId(Integer userId) {
-        List<Project> projects = projectRepository.findByProjectId(userId);
+        List<Project> projects = projectRepository.findByUserId(userId);
         return projects.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
