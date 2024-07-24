@@ -57,12 +57,12 @@ public class ProjectController {
     }
 
     @GetMapping("/getByID/{id}")
-    public ResponseEntity<Project> getProjectId(@PathVariable Integer id) {
-        Project project = projectService.getProjectById(id);
-        if (project == null) {
+    public ResponseEntity<ProjectDTO> getProjectId(@PathVariable Integer id) {
+        ProjectDTO projectDTO = projectService.getProjectById(id);
+        if (projectDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(project);
+        return ResponseEntity.ok(projectDTO);
     }
 
     @PutMapping("/{id}")
