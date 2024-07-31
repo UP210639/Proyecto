@@ -1,6 +1,7 @@
 package com.example.to_do_list.service;
 
 import com.example.to_do_list.dtos.TaskDTO;
+import com.example.to_do_list.exception.ExcepcionRecursoNoEncontrado;
 import com.example.to_do_list.models.Project;
 import com.example.to_do_list.models.Task;
 import com.example.to_do_list.models.User;
@@ -22,7 +23,7 @@ public class TaskService {
         return taskRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public TaskDTO getTaskById(Integer id) {
+    public TaskDTO getTaskById(Integer id) throws ExcepcionRecursoNoEncontrado {
         Optional<Task> task = taskRepository.findById(id);
         return task.map(this::convertToDTO).orElse(null);
     }

@@ -1,10 +1,13 @@
 package com.example.to_do_list.controllers;
 
 import com.example.to_do_list.dtos.TaskDTO;
+import com.example.to_do_list.models.Task;
 import com.example.to_do_list.service.TaskService;
+import com.example.to_do_list.exception.ExcepcionRecursoNoEncontrado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -22,12 +25,8 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Integer id) {
-        TaskDTO taskDTO = taskService.getTaskById(id);
-        if (taskDTO != null) {
-            return ResponseEntity.ok(taskDTO);
-        }
-        return ResponseEntity.notFound().build();
+    public TaskDTO getTaskById(@PathVariable Integer id) throws ExcepcionRecursoNoEncontrado {
+        return taskService.getTaskById(id);
     }
 
     @PostMapping
@@ -41,12 +40,8 @@ public class TaskController {
     }
     
     @GetMapping("/getByID/{id}")
-    public ResponseEntity<Task> getidTask(@PathVariable Integer id) {
-        Task task = taskService.getTasksByID(id);
-        if (task == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(task);
+    public   TaskDTO  getidTask(@PathVariable Integer id ) throws ExcepcionRecursoNoEncontrado{
+    return   taskService.getTaskById(id);
     }
 
     @PutMapping("/{id}")
