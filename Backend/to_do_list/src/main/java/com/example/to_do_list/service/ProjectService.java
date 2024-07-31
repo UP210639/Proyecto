@@ -1,22 +1,28 @@
 package com.example.to_do_list.service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.to_do_list.dtos.ProjectDTO;
 import com.example.to_do_list.dtos.TaskDTO;
 import com.example.to_do_list.models.Project;
+
 import com.example.to_do_list.models.Task;
+
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.repository.ProjectReposotory;
 
 @Service
 public class ProjectService {
+
     @Autowired
     private ProjectReposotory projectRepository;
 
-    public List<Project> getProjects() {
+    public List<ProjectDTO> getProjects() {
         return projectRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
@@ -27,7 +33,7 @@ public class ProjectService {
 
     public ProjectDTO createProject(ProjectDTO projectDTO) {
         Project project = convertToEntity(projectDTO);
-        task = projectRepository.save(project);
+        project = projectRepository.save(project);
         return convertToDTO(project);
     }
 
@@ -38,8 +44,8 @@ public class ProjectService {
             project.setName(projectDTO.getName());
             project.setDescription(projectDTO.getDescription());
             project.setDateAdd(projectDTO.getDateAdd());
-            project.setUser(new User(projectkDTO.getUserId()));
-            project = taskRepository.save(project);
+            project.setUser(new User(projectDTO.getUserId()));
+            project = projectRepository.save(project);
             return convertToDTO(project);
         }
         return null;
@@ -54,7 +60,7 @@ public class ProjectService {
     }
 
     public List<ProjectDTO> getProjectByUserId(Integer userId) {
-        List<Project> projects = projectRepository.findByProjectId(userId);
+        List<Project> projects = projectRepository.findByUserId(userId);
         return projects.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
