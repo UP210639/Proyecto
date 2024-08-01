@@ -54,7 +54,7 @@ public class ProjectController {
 
     @GetMapping("/user/{id}")
     public List<ProjectDTO> getProjecctByUserID(@PathVariable Integer id) {
-        return projectService.getProjectByUserId(id);
+        return projectService.getProjectsByUserId(id);
     }
 
     @PutMapping("/{id}")
@@ -65,7 +65,7 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Integer id) {
-        if (projectService.deleteProjecct(id)) {
+        if (projectService.deleteProject(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
