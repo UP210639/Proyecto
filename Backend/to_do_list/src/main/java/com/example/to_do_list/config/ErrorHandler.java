@@ -22,7 +22,7 @@ public class ErrorHandler {
     public ErrorDTO handleIllegalArgumentException(IllegalArgumentException ex) {
         return ErrorDTO.builder()
                 .code("ERR_ENUM_INVALID")
-                .message("Valor inválido para un campo enum. Asegúrese de usar un valor válido.")
+                .message("Los datos de entrada no coinciden con los esperados")
                 .details(List.of(ex.getMessage()))
                 .build();
     }
@@ -49,7 +49,7 @@ public class ErrorHandler {
                 .details(ex.getDetails())
                 .build();
     }
-    
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
