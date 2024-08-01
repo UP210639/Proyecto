@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.to_do_list.dtos.ProjectDTO;
 import com.example.to_do_list.dtos.TaskDTO;
+import com.example.to_do_list.exception.ExcepcionRecursoNoEncontrado;
 import com.example.to_do_list.models.Project;
 
 import com.example.to_do_list.models.Task;
@@ -26,9 +27,11 @@ public class ProjectService {
         return projectRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public ProjectDTO getProjectById(Integer id) {
-        Optional<Project> project = projectRepository.findById(id);
-        return project.map(this::convertToDTO).orElse(null);
+    public ProjectDTO getProjectById(Integer id) throws ExcepcionRecursoNoEncontrado {
+         return projectRepository
+         .findById(id)
+         .map(this::convertToDTO) 
+         .orElseThrow(() -> new ExcepcionRecursoNoEncontrado("Proyecto con ID " + id + " no encontrada"));
     }
 
     public ProjectDTO createProject(ProjectDTO projectDTO) {
@@ -37,20 +40,18 @@ public class ProjectService {
         return convertToDTO(project);
     }
 
-    public ProjectDTO updateProject(Integer id, ProjectDTO projectDTO) {
-        Optional<Project> projectOptional = projectRepository.findById(id);
-        if (projectOptional.isPresent()) {
-            Project project = projectOptional.get();
-            project.setName(projectDTO.getName());
-            project.setDescription(projectDTO.getDescription());
-            project.setDateAdd(projectDTO.getDateAdd());
-            project.setUser(new User(projectDTO.getUserId()));
-            project = projectRepository.save(project);
-            return convertToDTO(project);
-        }
-        return null;
+    public ProjectDTO updateProject(Integer id, ProjectDTO projectDTO) throws ExcepcionRecursoNoEncontrado {
+        Project project  = projectRepository.findById(id) 
+            .orElseThrow(() -> new ExcepcionRecursoNoEncontrado("Proyecto con ID " + id + " no encontrado"));
+            
+        project.setName(projectDTO.getName());
+        project.setDescription(projectDTO.getDescription());
+        project.setDateAdd(projectDTO.getDateAdd());
+        project.setUser(new User(projectDTO.getUserId()));
+        project = projectRepository.save(project);  
+        return convertToDTO(project);
     }
-
+    
     public boolean deleteProjecct(Integer id) {
         if (projectRepository.existsById(id)) {
             projectRepository.deleteById(id);

@@ -41,20 +41,12 @@ public class TaskController {
         return taskService.getTasksByProjectId(id);
     }
     
-    @GetMapping("/getByID/{id}")
-    public   TaskDTO  getidTask(@PathVariable Integer id ) throws ExcepcionRecursoNoEncontrado{
-    return   taskService.getTaskById(id);
-    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Integer id, @Valid @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Integer id, @Valid @RequestBody TaskDTO taskDTO) throws ExcepcionRecursoNoEncontrado {
         System.out.println(taskDTO);
-
         TaskDTO updatedTask = taskService.updateTask(id, taskDTO);
-        if (updatedTask != null) {
-            return ResponseEntity.ok(updatedTask);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updatedTask);
     }
 
     @DeleteMapping("/{id}")

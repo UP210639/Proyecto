@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.to_do_list.dtos.TaskDTO;
+import com.example.to_do_list.exception.ExcepcionRecursoNoEncontrado;
 import com.example.to_do_list.dtos.ProjectDTO;
 import com.example.to_do_list.models.Project;
 
@@ -22,6 +23,9 @@ import com.example.to_do_list.models.Task;
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.service.ProjectService;
 import com.example.to_do_list.service.TaskService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 //import jakarta.xml.bind.PropertyException;
 
@@ -38,16 +42,13 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Integer id) {
-        ProjectDTO projectDTO = projectService.getProjectById(id);
-        if (projectDTO != null) {
-            return ResponseEntity.ok(projectDTO);
-        }
-        return ResponseEntity.notFound().build();
+    public  ProjectDTO  getProjectById(@PathVariable  Integer id) throws ExcepcionRecursoNoEncontrado {
+      
+        return projectService.getProjectById(id);
     }
 
     @PostMapping
-    public ProjectDTO createProject(@RequestBody ProjectDTO projectDTO) {
+    public ProjectDTO createProject(@RequestBody @Valid  ProjectDTO projectDTO) {
         return projectService.createProject(projectDTO);
     }
 
@@ -56,22 +57,10 @@ public class ProjectController {
         return projectService.getProjectByUserId(id);
     }
 
-    @GetMapping("/getByID/{id}")
-    public ResponseEntity<ProjectDTO> getProjectId(@PathVariable Integer id) {
-        ProjectDTO projectDTO = projectService.getProjectById(id);
-        if (projectDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(projectDTO);
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) throws ExcepcionRecursoNoEncontrado {
         ProjectDTO updatedProject = projectService.updateProject(id, projectDTO);
-        if (updatedProject != null) {
-            return ResponseEntity.ok(updatedProject);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updatedProject);
     }
 
     @DeleteMapping("/{id}")

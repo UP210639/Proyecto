@@ -35,20 +35,23 @@ public class TaskService {
         return convertToDTO(task);
     }
 
-    public TaskDTO updateTask(Integer id, TaskDTO taskDTO) {
-        Optional<Task> taskOptional = taskRepository.findById(id);
-        if (taskOptional.isPresent()) {
-            Task task = taskOptional.get();
-            task.setName(taskDTO.getName());
-            task.setDescription(taskDTO.getDescription());
-            task.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
-            task.setDateAdd(taskDTO.getDateAdd());
-            task.setUser(new User(taskDTO.getUserId()));
-            task.setProject(new Project(taskDTO.getProjectId()));
-            task = taskRepository.save(task);
-            return convertToDTO(task);
-        }
-        return null;
+    public TaskDTO updateTask(Integer id, TaskDTO taskDTO) throws ExcepcionRecursoNoEncontrado {
+        Task task = taskRepository.findById(id)
+            .orElseThrow(() -> new ExcepcionRecursoNoEncontrado("Tarea con ID " + id + " no encontrada"));
+    
+        // Actualizar los campos de la tarea existente con los datos del DTO
+        task.setName(taskDTO.getName());
+        task.setDescription(taskDTO.getDescription());
+        task.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
+        task.setDateAdd(taskDTO.getDateAdd());
+        task.setUser(new User(taskDTO.getUserId()));
+        task.setProject(new Project(taskDTO.getProjectId()));
+        
+        // Guardar los cambios en el repositorio
+        task = taskRepository.save(task);
+        
+        // Convertir la entidad Task actualizada a DTO y devolverla
+        return convertToDTO(task);
     }
 
     public boolean deleteTask(Integer id) {
