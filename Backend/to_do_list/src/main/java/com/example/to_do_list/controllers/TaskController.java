@@ -32,7 +32,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskDTO createTask(@RequestBody TaskDTO taskDTO) {
+    public TaskDTO createTask(@RequestBody @Valid TaskDTO taskDTO) {
         return taskService.createTask(taskDTO);
     }
 

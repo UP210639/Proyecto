@@ -24,8 +24,9 @@ public class TaskService {
     }
 
     public TaskDTO getTaskById(Integer id) throws ExcepcionRecursoNoEncontrado {
-        Optional<Task> task = taskRepository.findById(id);
-        return task.map(this::convertToDTO).orElse(null);
+        return taskRepository.findById(id)
+            .map(this::convertToDTO)
+            .orElseThrow(() -> new ExcepcionRecursoNoEncontrado("Tarea con ID " + id + " no encontrada"));
     }
 
     public TaskDTO createTask(TaskDTO taskDTO) {

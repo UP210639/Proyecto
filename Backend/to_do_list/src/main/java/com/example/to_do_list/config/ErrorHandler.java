@@ -49,6 +49,7 @@ public class ErrorHandler {
                 .details(ex.getDetails())
                 .build();
     }
+    
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
