@@ -29,12 +29,7 @@ public class User {
     @Column(name = "is_admin", nullable = false)
     private Boolean isAdmin = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Project> projects;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
-
+  
     public User() {
     }
 

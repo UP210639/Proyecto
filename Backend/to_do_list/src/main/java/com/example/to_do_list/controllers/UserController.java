@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.to_do_list.exception.ExcepcionRecursoNoEncontrado;
 import com.example.to_do_list.models.User;
 import com.example.to_do_list.service.UserService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/users")
@@ -28,12 +31,14 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("/getByID/{id}")
-    public ResponseEntity<User> getUserId(@PathVariable Integer id) {
-        User user = userService.getUserByID(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+    @GetMapping("valid/{email}")
+    public User validUserByEmail(@RequestParam String email) throws ExcepcionRecursoNoEncontrado {
+        User user = userService.getUserByEmail(email);
+        return user;
     }
+    
+
+
+
+ 
 }
