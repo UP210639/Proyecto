@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
- 
+
 @Entity
 @Table(name = "tasks")
 @Data
@@ -23,7 +23,7 @@ public class Task {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+    private Status status = Status.pending;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime dateAdd = LocalDateTime.now();
@@ -44,8 +44,8 @@ public class Task {
     }
 
     public enum Status {
-        PENDING,
-        IN_PROGRESS,
-        COMPLETED
+        pending,
+        in_progres,
+        completed
     }
 }
