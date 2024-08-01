@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import ProjectList from "../ProjectList";
-import TaskTable from "../TaskList";
+import TaskTable from "../TaskTable";
 import Login from "../Login";
 import React from "react";
 
