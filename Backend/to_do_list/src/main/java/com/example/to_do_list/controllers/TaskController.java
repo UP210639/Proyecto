@@ -3,6 +3,9 @@ package com.example.to_do_list.controllers;
 import com.example.to_do_list.dtos.TaskDTO;
 import com.example.to_do_list.models.Task;
 import com.example.to_do_list.service.TaskService;
+
+import jakarta.validation.Valid;
+
 import com.example.to_do_list.exception.ExcepcionRecursoNoEncontrado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +47,9 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Integer id, @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Integer id, @Valid @RequestBody TaskDTO taskDTO) {
+        System.out.println(taskDTO);
+
         TaskDTO updatedTask = taskService.updateTask(id, taskDTO);
         if (updatedTask != null) {
             return ResponseEntity.ok(updatedTask);

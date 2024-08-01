@@ -16,6 +16,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ErrorHandler {
 
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ErrorDTO.builder()
+                .code("ERR_ENUM_INVALID")
+                .message("Valor inválido para un campo enum. Asegúrese de usar un valor válido.")
+                .details(List.of(ex.getMessage()))
+                .build();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO validationError(MethodArgumentNotValidException ex) {
