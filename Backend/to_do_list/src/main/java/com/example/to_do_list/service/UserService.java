@@ -1,6 +1,7 @@
 package com.example.to_do_list.service;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,14 @@ public class UserService {
         User user = userRepository.findUserByEmail(email)
             .orElseThrow(() -> new ExcepcionRecursoNoEncontrado("El usuario con el correo " + email + " no fue encontrado"));
         return user;
+    }
+
+    public User toUpperCaseName(User user) {
+        Function<User, User> toUpperCase = u -> {
+            u.setFirstName(u.getFirstName().toUpperCase());
+            u.setLastName(u.getLastName().toUpperCase());
+            return u;
+        };
+        return toUpperCase.apply(user);
     }
 }

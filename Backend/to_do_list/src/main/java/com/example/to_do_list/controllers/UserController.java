@@ -31,14 +31,9 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("valid/{email}")
+    @GetMapping("/valid/{email}")
     public User validUserByEmail(@RequestParam String email) throws ExcepcionRecursoNoEncontrado {
         User user = userService.getUserByEmail(email);
-        return user;
-    }
-    
-
-
-
- 
+        return userService.toUpperCaseName(user);
+    } 
 }
