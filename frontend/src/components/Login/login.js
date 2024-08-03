@@ -1,18 +1,26 @@
 import * as React from 'react';
-import {Avatar,Button,CssBaseline,TextField} from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+  Snackbar,
+  Alert as MuiAlert
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Logo, { LogImage } from '../Img';
-import { LogImage2 } from '../Img';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../Img';
+import { LogImage } from '../Img'; // Asegúrate de que la ruta a Logo es correcta
 
+// Crear tema personalizado
 const theme = createTheme({
   palette: {
     primary: {
@@ -38,34 +46,75 @@ const theme = createTheme({
   },
 });
 
+// Componente de alerta
+const Alert = React.forwardRef((props, ref) => (
+  <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+));
+
 export default function Login() {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
+  const [userError, setUserError] = React.useState(''); // Estado para el error de usuario
+  const [passwordError, setPasswordError] = React.useState(''); // Estado para el error de contraseña
+  const [openSnackbar, setOpenSnackbar] = React.useState(false); // Estado del Snackbar
+  const [snackbarMessage, setSnackbarMessage] = React.useState(''); // Mensaje del Snackbar
+  const [snackbarSeverity, setSnackbarSeverity] = React.useState('success'); // Severidad del Snackbar
+
+  const validateUser = (user) => {
+    return user && user.trim().length > 0;
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const User = data.get('User');
+    const user = data.get('User');
     const password = data.get('password');
 
-    // Simple validation
-    if (!User || !password) {
-      alert('Please fill in both fields.');
-      return;
+    // Validar usuario
+    if (!validateUser(user)) {
+      setUserError('Please enter a valid username.');
+    } else {
+      setUserError('');
     }
 
-    if (password.length < 6) {
-      alert('Password must be at least 6 characters long.');
-      return;
+    // Validar contraseña
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 6 characters long.');
+    } else {
+      setPasswordError('');
     }
 
-    // Simulate successful login
-    console.log({
-      User,
-      password,
-    });
+    // Simular autenticación
+    if (validateUser(user) && validatePassword(password)) {
+      if (user === 'user@example.com' && password === 'password123') {
+        // Credenciales correctas
+        setSnackbarMessage('Login successful!');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
 
-    // Redirect to dashboard
-    Navigate('/projects');
+        // Redirigir después de un inicio de sesión exitoso
+        setTimeout(() => {
+          navigate('/projects');
+        }, 2000); // Redirigir después de 2 segundos
+      } else {
+        // Credenciales incorrectas
+        setSnackbarMessage('Invalid username or password.');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+      }
+    } else {
+      // Mostrar errores de validación
+      setSnackbarMessage('Please correct the errors above.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -78,7 +127,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:'url('+LogImage+')',
+            backgroundImage: 'url(' + LogImage + ')',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
@@ -89,16 +138,16 @@ export default function Login() {
           <Box
             sx={{
               my: 8,
-              mx: 'auto',  // Center horizontally
-              maxWidth: 400,  // Limit the width
+              mx: 'auto',  // Centrar horizontalmente
+              maxWidth: 400,  // Limitar el ancho
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              padding: 4,  // Add padding
+              padding: 4,  // Añadir relleno
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              <img src={Logo} alt="logo" style={{ width: 40, height: 40 , objectFit: 'cover'}} />
+              <img src={Logo} alt="logo" style={{ width: 40, height: 40, objectFit: 'cover' }} />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
@@ -113,7 +162,9 @@ export default function Login() {
                 name="User"
                 autoComplete="User"
                 autoFocus
-                sx={{ mb: 2 }}  // Add margin-bottom
+                error={!!userError}
+                helperText={userError}
+                sx={{ mb: 2 }}  // Añadir margen inferior
               />
               <TextField
                 margin="normal"
@@ -124,19 +175,21 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                sx={{ mb: 2 }}  // Add margin-bottom
+                error={!!passwordError}
+                helperText={passwordError}
+                sx={{ mb: 2 }}  // Añadir margen inferior
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-                sx={{ mb: 2 }}  // Add margin-bottom
+                sx={{ mb: 2 }}  // Añadir margen inferior
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"  // Change button color
-                sx={{ mt: 2, mb: 2, py: 1.5 }}  // Add margin-top and padding
+                color="primary"  // Cambiar color del botón
+                sx={{ mt: 2, mb: 2, py: 1.5 }}  // Añadir margen superior e inferior y relleno
               >
                 Sign In
               </Button>
@@ -144,6 +197,12 @@ export default function Login() {
           </Box>
         </Grid>
       </Grid>
+      {/* Snackbar para mostrar mensajes de éxito o error */}
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

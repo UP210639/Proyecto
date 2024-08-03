@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MaterialReactTable, useMaterialReactTable, MRT_EditActionButtons } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable} from 'material-react-table';
 import { useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,54 +7,63 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Box,
     Button,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
     Tooltip,
 } from '@mui/material';
 
+import ModalCreateTask from './ModalCreateTask';
+import ModalEditTask from './ModalEditTask';
+
 export default function TaskTable() {
+
+    const findUserNameById = (userId) => {
+        const user = users.find(user => user.id === userId);
+        return user ? user.firstName + " " + user.lastName : 'Unknown';
+    };
 
     const PROJECT = useParams().projectID;
     const [data, setData] = useState([]);
-    const USER = 1;
+    const [users, setUsers] = useState([]);
+    const [project, setProject] = useState([]);
+    const [task, setTask] = useState([]);
+
+    const [openModalCreate, setOpenCreate] = useState(false);
+    const handleOpenModalCreate = () => setOpenCreate(true);
+    const handleCloseModalCreate = () => setOpenCreate(false);
+
+    const [openModalEdit, setOpenEdit] = useState(false);
+    const handleOpenModalEdit = () => setOpenEdit(true);
+    const handleCloseModalEdit = () => setOpenEdit(false);
+
     const columns = [
-        // estas madres no tienen que aparecer :D
         {
-            header: "id",
+            header: "ID",
             accessorFn: (row) => row.id,
-            enableEditing: false,
         },
         {
-            header: "responsable",
-            accessorFn: (row) => row.user,
+            header: "Responsable",
+            accessorFn: (row) => findUserNameById(row.userId),
         },
         {
-            header: "name",
+            header: "Nombre",
             accessorFn: (row) => row.name,
         },
         {
-            header: "description",
+            header: "Descripción",
             accessorFn: (row) => row.description,
         },
         {
-            header: "status",
+            header: "Estado",
             accessorFn: (row) => row.status,
-            enableEditing: false,
         },
-
         {
-            header: "dateAdd",
+            header: "Fecha de creación",
             accessorFn: (row) => row.dateAdd,
-            enableEditing: false,
         },
         {
-            header: "project_Id",
-            accessorFn: (row) => row.projectId,
-            enableEditing: false,
+            header: "Proyecto",
+            accessorFn: () => project.name,
         },
-
     ]
     const getData = () => {
 
@@ -73,20 +82,72 @@ export default function TaskTable() {
             });
     }
 
+    const getUsers = () => {
+
+        fetch("http://localhost:8080/users/get", {  //Tareas por project id :o
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setUsers(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    const getProject = () => {
+
+        fetch("http://localhost:8080/project/" + PROJECT, {  //Tareas por project id :o
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setProject(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    const getTask = (id) => {
+
+        fetch("http://localhost:8080/tasks/" + id, {  //Tareas por project id :o
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                setTask(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
     useEffect(() => {
         if (PROJECT)
             getData();
+        getUsers();
+        getProject();
     }, [PROJECT])
 
     //handle values from edit modal
-    const handleCreateTask = ({ values }) => {
-        console.log(values)
-        values.userId = USER;
+    const handleCreateTask = (values) => {
         values.projectId = PROJECT;
         values.status = "pending";//deacuerdo a la base de datos, solo 3 valores posibles
         values.dateAdd = new Date().toISOString();
 
-        fetch("http://localhost:8080/task", {
+        fetch("http://localhost:8080/tasks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -107,9 +168,8 @@ export default function TaskTable() {
         }
     };
 
-    const handleEditUser = ({ values }) => {
-        console.log(values)
-        fetch("http://localhost:8080/task/" + values.id, {
+    const handleEditTask = ( values ) => {
+        fetch("http://localhost:8080/tasks/" + values.id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -125,7 +185,7 @@ export default function TaskTable() {
     }
 
     const handleDeleteTask = (taskId) => {
-        fetch("http://localhost:8080/task/" + taskId, {
+        fetch("http://localhost:8080/tasks/" + taskId, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -142,27 +202,24 @@ export default function TaskTable() {
     const table = useMaterialReactTable({
         columns: columns,
         data: data,
-        createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
-        editDisplayMode: 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
         enableEditing: true,
         getRowId: (row) => row.id,
-        onCreatingRowSave: handleCreateTask,
-        onEditingRowSave: handleEditUser,
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: ( ) => (
             <Button
                 variant="contained"
-                onClick={() => {
-                    table.setCreatingRow(true); //simplest way to open the create row modal with no default values
-                }}
+                onClick={handleOpenModalCreate}
             >
                 Create New Task
             </Button>
         ),
-        renderRowActions: ({ row, table }) => (
+        renderRowActions: ({ row }) => (
 
             <Box sx={{ display: 'flex', gap: '1rem' }}>
                 <Tooltip title="Edit">
-                    <IconButton onClick={() => table.setEditingRow(row)}>
+                    <IconButton onClick={()=>{
+                        getTask(row.id);
+                        handleOpenModalEdit()
+                    }}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>
@@ -173,24 +230,28 @@ export default function TaskTable() {
                 </Tooltip>
             </Box>
         ),
-        renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
-            <>
-                <DialogTitle variant="h4" fontFamily='Georgia, serif' align=''>Create new task</DialogTitle>
-                <DialogContent
-                    sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {internalEditComponents} {/* or render custom edit components here */}
-                </DialogContent>
-                <DialogActions>
-                    <MRT_EditActionButtons variant="text" table={table} row={row} />
-                </DialogActions>
-            </>
-        ),
     })
     return (
         <Box >
             <Box sx={{ m: 4 }} >
                 <MaterialReactTable table={table} />
             </Box>
+
+            <ModalCreateTask
+                open={openModalCreate}
+                handleClose={handleCloseModalCreate}
+                users={users}
+                handleCreate={handleCreateTask}
+            />
+
+            <ModalEditTask
+                open={openModalEdit}
+                handleClose={handleCloseModalEdit}
+                users={users}
+                task={task}
+                handleEditTask={handleEditTask}
+            />
+
         </Box>
     )
 }

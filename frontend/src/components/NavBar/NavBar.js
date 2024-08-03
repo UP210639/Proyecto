@@ -21,6 +21,7 @@ import { FaFolder } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { useState,useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { LogImage2 } from '../Img';
 
 function GetProjects(){
   const [data,setData]=useState(null)
@@ -131,8 +132,8 @@ const NavBar= () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src={LogImage2} />
               </IconButton>
             </Tooltip>
             <Menu
