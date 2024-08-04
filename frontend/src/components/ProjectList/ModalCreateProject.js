@@ -21,6 +21,8 @@ const style = {
 
 const ModalCreateProject = ({open, handleClose, users , handleCreate}) => {
 
+    const user=JSON.parse(localStorage.getItem("user"))
+
     const [values, setValues] = useState({
         name: '',
         description: '',
@@ -38,6 +40,7 @@ const ModalCreateProject = ({open, handleClose, users , handleCreate}) => {
 
       const handleSubmit = () => {
         values.dateAdd=new Date().toISOString()
+        values.userId =user.id
         handleCreate(values);
         setValues({
             name: '',

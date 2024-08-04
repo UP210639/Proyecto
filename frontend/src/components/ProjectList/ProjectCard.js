@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import ModalEditProject from './ModalEditProject';
 
 const ProjectCard = ({ data, deleteProject, openModal, handleCloseModal, handleOpenModal, users, project, getProject, handleEditProject}) => {
-
+    const user=JSON.parse(localStorage.getItem("user"))
     return (
         <React.Fragment>
             {data?.map((project) => (
@@ -33,17 +33,21 @@ const ProjectCard = ({ data, deleteProject, openModal, handleCloseModal, handleO
                             </Typography>
                         </CardContent>
                     </Link>
-                    <CardActions >
+                    {user.isAdmin ?
+
+                        <CardActions >
                         <IconButton size="medium" onClick={()=>{
-                                getProject(project.id);
-                                handleOpenModal()}
-                                }>
+                            getProject(project.id);
+                            handleOpenModal()}
+                        }>
                             <GoPencil />
                         </IconButton>
                         <IconButton size="medium" onClick={() => deleteProject(project.id, project.name)}>
                             <FaRegTrashCan />
                         </IconButton>
-                    </CardActions>
+                    </CardActions>:
+                    null
+                    }
                 </Card>
             ))}
 

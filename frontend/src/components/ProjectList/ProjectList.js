@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 
 const ProjectList = () => {
 
+  const user=JSON.parse(localStorage.getItem("user"))
+
   const [data, setData] = useState([]);
   const [project,setProject] =useState([]);
   const [users, setUsers] = useState([]);
@@ -19,16 +21,31 @@ const ProjectList = () => {
   const handleOpenModalEdit = () => setOpenEdit(true);
   const handleCloseModalEdit = () => setOpenEdit(false);
 
+
+   
+
   const getData = () => {
-    fetch("http://localhost:8080/project", {
+    
+    let link  ="http://localhost:8080/project/user/"+user.id
+
+    if(user.isAdmin){
+      link="http://localhost:8080/project"
+    } 
+
+
+    fetch(link, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       }
     })
-      .then(res => res.json())
+      .then(res =>  {
+        console.log(res)
+        return res.json()
+      }) 
       .then(data => {
-      setData(data);
+        console.log(data)
+        setData(data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -96,7 +113,10 @@ const ProjectList = () => {
         },
         body:JSON.stringify(values)
     })
-    .then( ()=>{getData()})
+    .then( (data)=>{
+      console.log(data);
+      getData()
+    })
     .catch(error => {
         console.error('Error:', error);
     });
@@ -143,8 +163,13 @@ const handleEditProject =(values)=>{
           }}
         >
           Proyectos
-          <Button variant='contained' onClick={handleOpenModalCreate}>
-            Crear proyecto</Button>
+          {user.isAdmin ?
+            <Button variant='contained' onClick={handleOpenModalCreate}>
+              Crear proyecto
+            </Button>:
+          null
+          }
+         
         </Typography>
 
       </Box>

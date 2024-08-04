@@ -24,13 +24,24 @@ import { Link } from "react-router-dom";
 import { LogImage2 } from '../Img';
 
 function GetProjects(){
-  const [data,setData]=useState(null)
+  const [data,setData]=useState([])
+  
   
   useEffect(()=>{
-      fetch("http://localhost:8080/project")
+    const user=JSON.parse(localStorage.getItem("user"))
+    console.log(user)
+    let link  ="http://localhost:8080/project/user/"+user.id
+
+    if(user.isAdmin){
+      link="http://localhost:8080/project"
+    } 
+
+      fetch(link,{
+        method:"GET"
+      })
       .then((response)=>response.json())
       .then((data)=>setData(data))
-  })
+  },[])
 
   return {data}
 }

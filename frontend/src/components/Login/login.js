@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import Logo from '../Img';
 import { LogImage } from '../Img'; // Asegúrate de que la ruta a Logo es correcta
 
@@ -58,7 +58,7 @@ export default function Login() {
   const [openSnackbar, setOpenSnackbar] = React.useState(false); // Estado del Snackbar
   const [snackbarMessage, setSnackbarMessage] = React.useState(''); // Mensaje del Snackbar
   const [snackbarSeverity, setSnackbarSeverity] = React.useState('success'); // Severidad del Snackbar
-
+   
   const validateUser = (user) => {
     return user && user.trim().length > 0;
   };
@@ -70,47 +70,33 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user = data.get('User');
+    const email = data.get('User');
+
     const password = data.get('password');
 
-    // Validar usuario
-    if (!validateUser(user)) {
-      setUserError('Please enter a valid username.');
-    } else {
-      setUserError('');
-    }
+      fetch("http://localhost:8080/users/valid/"+email,{
+          
+        
+      }).then((res)=>{
 
-    // Validar contraseña
-    if (!validatePassword(password)) {
-      setPasswordError('Password must be at least 6 characters long.');
-    } else {
-      setPasswordError('');
-    }
+        if (res.status !== 200) {
+          setUserError('Please enter a valid username or password .');
+          return
+        } else {
+          setUserError('');
+          return res.json()
+        }
 
-    // Simular autenticación
-    if (validateUser(user) && validatePassword(password)) {
-      if (user === 'user@example.com' && password === 'password123') {
-        // Credenciales correctas
-        setSnackbarMessage('Login successful!');
-        setSnackbarSeverity('success');
-        setOpenSnackbar(true);
+      
+        
+        // Validar usuario
+      }).then((data)=>{
+          console.log(data)
+          localStorage.setItem("user",JSON.stringify(data))
+          navigate('/projects');        
+      })
 
-        // Redirigir después de un inicio de sesión exitoso
-        setTimeout(() => {
-          navigate('/projects');
-        }, 2000); // Redirigir después de 2 segundos
-      } else {
-        // Credenciales incorrectas
-        setSnackbarMessage('Invalid username or password.');
-        setSnackbarSeverity('error');
-        setOpenSnackbar(true);
-      }
-    } else {
-      // Mostrar errores de validación
-      setSnackbarMessage('Please correct the errors above.');
-      setSnackbarSeverity('error');
-      setOpenSnackbar(true);
-    }
+ 
   };
 
   const handleCloseSnackbar = () => {

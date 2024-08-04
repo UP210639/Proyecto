@@ -57,6 +57,7 @@ export default function TaskTable() {
   ];
 
   const getData = () => {
+    console.log("here")
     fetch("http://localhost:8080/tasks/project/" + PROJECT, {
       method: "GET",
       headers: {
@@ -75,7 +76,7 @@ export default function TaskTable() {
   useEffect(() => {
     if (PROJECT)
       getData();
-  }, [PROJECT])
+  }, [])
 
   const handleCreateTask = ({ values }) => {
     console.log(values)
