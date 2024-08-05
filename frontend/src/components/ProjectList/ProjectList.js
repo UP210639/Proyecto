@@ -4,13 +4,14 @@ import ProjectCard from './ProjectCard';
 import Typography from '@mui/material/Typography';
 import ModalCreateProject from './ModalCreateProject';
 import { useState, useEffect } from 'react';
+import projectListTheme from './EstilosProjectList'; // Importa el tema personalizado
 
 const ProjectList = () => {
 
-  const user=JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const [data, setData] = useState([]);
-  const [project,setProject] =useState([]);
+  const [project, setProject] = useState([]);
   const [users, setUsers] = useState([]);
 
   const [openModalCreate, setOpenCreate] = React.useState(false);
@@ -21,17 +22,12 @@ const ProjectList = () => {
   const handleOpenModalEdit = () => setOpenEdit(true);
   const handleCloseModalEdit = () => setOpenEdit(false);
 
-
-   
-
   const getData = () => {
-    
-    let link  ="http://localhost:8080/project/user/"+user.id
+    let link = "http://localhost:8080/project/user/" + user.id;
 
-    if(user.isAdmin){
-      link="http://localhost:8080/project"
-    } 
-
+    if (user.isAdmin) {
+      link = "http://localhost:8080/project";
+    }
 
     fetch(link, {
       method: "GET",
@@ -39,12 +35,8 @@ const ProjectList = () => {
         "Content-Type": "application/json",
       }
     })
-      .then(res =>  {
-        console.log(res)
-        return res.json()
-      }) 
+      .then(res => res.json())
       .then(data => {
-        console.log(data)
         setData(data);
       })
       .catch(error => {
@@ -53,7 +45,7 @@ const ProjectList = () => {
   }
 
   const getProject = (id) => {
-    fetch("http://localhost:8080/project/"+id, {
+    fetch("http://localhost:8080/project/" + id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +53,7 @@ const ProjectList = () => {
     })
       .then(res => res.json())
       .then(data => {
-      setProject(data);
+        setProject(data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -77,7 +69,7 @@ const ProjectList = () => {
     })
       .then(res => res.json())
       .then(data => {
-      setUsers(data);
+        setUsers(data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -85,7 +77,7 @@ const ProjectList = () => {
   }
 
   const openDeleteConfirmModal = (project_id, project_name) => {
-    if (window.confirm('¿Estas seguro de eliminar el proyecto ' + project_name + ' ? ')) {
+    if (window.confirm('¿Estás seguro de eliminar el proyecto ' + project_name + ' ? ')) {
       handleDeleteProject(project_id);
     }
   };
@@ -105,37 +97,37 @@ const ProjectList = () => {
       });
   }
 
-  const handleCreateProject =(values)=>{
+  const handleCreateProject = (values) => {
     fetch("http://localhost:8080/project", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",  
-        },
-        body:JSON.stringify(values)
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values)
     })
-    .then( (data)=>{
-      console.log(data);
-      getData()
-    })
-    .catch(error => {
+      .then(() => {
+        getData();
+      })
+      .catch(error => {
         console.error('Error:', error);
-    });
-}
+      });
+  }
 
-const handleEditProject =(values)=>{
-  fetch("http://localhost:8080/project/"+values.id, {
+  const handleEditProject = (values) => {
+    fetch("http://localhost:8080/project/" + values.id, {
       method: "PUT",
       headers: {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify(values)
-  })
-  .then( ()=>{
-      getData()})
-  .catch(error => {
-      console.error('Error:', error);
-  });
-}
+      body: JSON.stringify(values)
+    })
+      .then(() => {
+        getData();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
   useEffect(() => {
     getData();
@@ -144,62 +136,45 @@ const handleEditProject =(values)=>{
 
   return (
     <React.Fragment>
-
-      <Box sx={{ width: '100%' }}>
+      <Box sx={projectListTheme.mainContainer}> {/* Aplica fondo degradado y estilos al contenedor principal */}
         <Typography
           variant="h4"
           noWrap
-          sx={{
-            mr: 2,
-            display: { xs: 'none', md: 'flex' },
-            fontFamily: 'monospace',
-            fontWeight: 700,
-            letterSpacing: '.3rem',
-            color: 'inherit',
-            textDecoration: 'none',
-            margin: '50px',
-            flexGrow: '1',
-            gap: '50px'
-          }}
+          sx={projectListTheme.typography} // Aplica estilos al texto de la cabecera
         >
           Proyectos
-          {user.isAdmin ?
-            <Button variant='contained' onClick={handleOpenModalCreate}>
+          {user.isAdmin &&
+            <Button
+              variant='contained'
+              onClick={handleOpenModalCreate}
+              sx={projectListTheme.createProjectButton} // Aplica estilos al botón de crear proyecto
+            >
               Crear proyecto
-            </Button>:
-          null
+            </Button>
           }
-         
         </Typography>
 
-      </Box>
-      <Box sx={{
-        width: '100%',
-        display: 'flex',
-        flexWrap: 'wrap',
-        margin: '50px',
-        gap: '50px'
-      }}>
-        <ProjectCard 
-          data={data} 
-          deleteProject={openDeleteConfirmModal} 
-          handleOpenModal={handleOpenModalEdit}
-          openModal={openModalEdit} 
-          handleCloseModal={handleCloseModalEdit} 
-          users={users}
-          getProject={getProject}
-          project={project}
-          handleEditProject={handleEditProject}
-        />
+        <Box sx={projectListTheme.projectContainer}> {/* Estilo para el contenedor de tarjetas */}
+          <ProjectCard
+            data={data}
+            deleteProject={openDeleteConfirmModal}
+            handleOpenModal={handleOpenModalEdit}
+            openModal={openModalEdit}
+            handleCloseModal={handleCloseModalEdit}
+            users={users}
+            getProject={getProject}
+            project={project}
+            handleEditProject={handleEditProject}
+          />
+        </Box>
       </Box>
 
-      <ModalCreateProject 
-        open={openModalCreate} 
-        handleClose={handleCloseModalCreate} 
-        users={users} 
+      <ModalCreateProject
+        open={openModalCreate}
+        handleClose={handleCloseModalCreate}
+        users={users}
         handleCreate={handleCreateProject}
       />
-
     </React.Fragment>
   );
 }

@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../Img';
 import { LogImage } from '../Img'; // Asegúrate de que la ruta a Logo es correcta
 
@@ -64,39 +64,63 @@ export default function Login() {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 6;
+    return password && password.length >= 6;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('User');
-
     const password = data.get('password');
 
-      fetch("http://localhost:8080/users/valid/"+email,{
-          method:"GET"
-        
-      }).then((res)=>{
+    // Validar los campos antes de hacer la petición
+    if (!validateUser(email)) {
+      setUserError('Username is required.');
+      setSnackbarMessage('Username is required.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    } else {
+      setUserError('');
+    }
 
-        if (res.status !== 200) {
-          setUserError('Please enter a valid username or password .');
-          return
-        } else {
-          setUserError('');
-          return res.json()
-        }
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 6 characters.');
+      setSnackbarMessage('Password must be at least 6 characters.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    } else {
+      setPasswordError('');
+    }
 
-      
-        
-        // Validar usuario
-      }).then((data)=>{
-          console.log(data)
-          localStorage.setItem("user",JSON.stringify(data))
-          navigate('/projects');        
-      })
+    try {
+      const response = await fetch(`http://localhost:8080/users/valid/${email}`, {
+        method: "GET"
+      });
 
- 
+      if (response.status !== 200) {
+        setUserError('Please enter a valid username or password.');
+        setSnackbarMessage('Please enter a valid username or password.');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+        return;
+      }
+
+      const userData = await response.json();
+      console.log(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      setSnackbarMessage('Login successful!');
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+
+      navigate('/projects');
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setSnackbarMessage('There was an error processing your request. Please try again later.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCloseSnackbar = () => {

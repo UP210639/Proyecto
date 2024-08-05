@@ -19,6 +19,25 @@ const style = {
     p: 4,
 };
 
+const buttonStyles = {
+  createButton: {
+      backgroundColor: 'white', // Color inicial blanco
+      color: 'black', // Color del texto negro
+      '&:hover': {
+          backgroundColor: '#FADE40', // Cambia a amarillo al pasar el mouse
+      },
+      transition: 'all 0.3s ease-in-out', // Transición suave para el cambio
+  },
+  cancelButton: {
+      backgroundColor: '#9E9E9E', // Color inicial gris
+      color: 'white', // Color del texto blanco
+      '&:hover': {
+          backgroundColor: '#616161', // Oscurecer el gris al pasar el mouse
+      },
+      transition: 'all 0.3s ease-in-out', // Transición suave para el cambio
+  },
+};
+
 const ModalEditTask = ({ open, handleClose, users, task, handleEditTask }) => {
     const user=JSON.parse(localStorage.getItem("user"))
     const [values, setValues] = useState({
@@ -136,7 +155,7 @@ const ModalEditTask = ({ open, handleClose, users, task, handleEditTask }) => {
               <Box sx={{ display: 'flex', gap: '20px' }}>
                 <Button
                   variant="contained"
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2  , ...buttonStyles.createButton}}
                   onClick={() => {
                     if (task) {
                       handleEditTask(values);
@@ -146,7 +165,7 @@ const ModalEditTask = ({ open, handleClose, users, task, handleEditTask }) => {
                 >
                   Guardar
                 </Button>
-                <Button variant="contained" sx={{ mt: 2 }} onClick={handleClose}>
+                <Button variant="contained" sx={{ mt: 2  , ...buttonStyles.cancelButton}} onClick={handleClose}>
                   Descartar
                 </Button>
               </Box>

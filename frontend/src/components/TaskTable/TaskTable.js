@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { MaterialReactTable, useMaterialReactTable} from 'material-react-table';
+import { useState, useEffect } from 'react';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,9 +13,10 @@ import {
 
 import ModalCreateTask from './ModalCreateTask';
 import ModalEditTask from './ModalEditTask';
+import taskTableTheme from './EstilosTask'; // Importa el tema personalizado
 
 export default function TaskTable() {
-    const user=JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const PROJECT = useParams().projectID;
     const [data, setData] = useState([]);
@@ -31,12 +32,11 @@ export default function TaskTable() {
     const handleOpenModalEdit = () => setOpenEdit(true);
     const handleCloseModalEdit = () => setOpenEdit(false);
 
-    let link  ="http://localhost:8080/project/user/"+user.id
+    let link = "http://localhost:8080/project/user/" + user.id;
 
-    if(user.isAdmin){
-      link="http://localhost:8080/project"
-    } 
-
+    if (user.isAdmin) {
+        link = "http://localhost:8080/project";
+    }
 
     const columns = [
         {
@@ -67,17 +67,16 @@ export default function TaskTable() {
             header: "Proyecto",
             accessorFn: (row) => row.project.name,
         },
-    ]
+    ];
+
     const getData = () => {
+        let link = "http://localhost:8080/tasks/" + PROJECT + "/" + user.id;
 
-        let link  ="http://localhost:8080/tasks/"+PROJECT+"/"+user.id
+        if (user.isAdmin) {
+            link = "http://localhost:8080/tasks/project/" + PROJECT;
+        }
 
-        if(user.isAdmin){
-          link="http://localhost:8080/tasks/project/" + PROJECT
-        } 
-    
-
-        fetch(link, {  //Tareas por project id :o
+        fetch(link, {  //Tareas por project id
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -90,11 +89,10 @@ export default function TaskTable() {
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     const getUsers = () => {
-
-        fetch("http://localhost:8080/users/get", {  //Tareas por project id :o
+        fetch("http://localhost:8080/users/get", {  //Obtener usuarios
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -107,11 +105,10 @@ export default function TaskTable() {
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     const getProject = () => {
-
-        fetch("http://localhost:8080/project/" + PROJECT, {  //Tareas por project id :o
+        fetch("http://localhost:8080/project/" + PROJECT, {  //Obtener proyecto
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -124,11 +121,10 @@ export default function TaskTable() {
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     const getTask = (id) => {
-
-        fetch("http://localhost:8080/tasks/" + id, {  //Tareas por project id :o
+        fetch("http://localhost:8080/tasks/" + id, {  //Obtener tarea
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -136,25 +132,24 @@ export default function TaskTable() {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
+                console.log(data);
                 setTask(data);
             })
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     useEffect(() => {
-        if (PROJECT)
-            getData();
+        if (PROJECT) getData();
         getUsers();
         getProject();
-    }, [PROJECT])
+    }, [PROJECT]);
 
     //handle values from edit modal
     const handleCreateTask = (values) => {
         values.projectId = PROJECT;
-        values.status = "pending";//deacuerdo a la base de datos, solo 3 valores posibles
+        values.status = "pending"; //Valores posibles según base de datos
         values.dateAdd = new Date().toISOString();
 
         fetch("http://localhost:8080/tasks", {
@@ -164,21 +159,19 @@ export default function TaskTable() {
             },
             body: JSON.stringify(values)
         })
-            .then(() => { getData() })
+            .then(() => { getData(); })
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     const openDeleteConfirmModal = (row) => {
-
         if (window.confirm('Are you sure you want to delete this task?')) {
-
             handleDeleteTask(row.original.id);
         }
     };
 
-    const handleEditTask = ( values ) => {
+    const handleEditTask = (values) => {
         fetch("http://localhost:8080/tasks/" + values.id, {
             method: "PUT",
             headers: {
@@ -192,7 +185,7 @@ export default function TaskTable() {
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     const handleDeleteTask = (taskId) => {
         fetch("http://localhost:8080/tasks/" + taskId, {
@@ -207,55 +200,54 @@ export default function TaskTable() {
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     const table = useMaterialReactTable({
         columns: columns,
         data: data,
         enableEditing: true,
         getRowId: (row) => row.id,
-        renderTopToolbarCustomActions: ( ) => {
-
-            if(user.isAdmin){
-                return( <Button
-                    variant="contained"
-                    onClick={handleOpenModalCreate}
+        renderTopToolbarCustomActions: () => {
+            if (user.isAdmin) {
+                return (
+                    <Button
+                        sx={taskTableTheme.createTaskButton} // Aplica estilos personalizados
+                        variant="contained"
+                        onClick={handleOpenModalCreate}
                     >
                         Create New Task
-                    </Button>)
-
-            }else return null
-           
-    
-    },
+                    </Button>
+                );
+            } else return null;
+        },
         renderRowActions: ({ row }) => (
-
-            <Box sx={{ display: 'flex', gap: '1rem' }}>
-                <Tooltip title="Edit">
-                    <IconButton onClick={()=>{
+            <Box sx={taskTableTheme.boxContainer}> {/* Aplica estilos personalizados */}
+                <Tooltip title="Edit" sx={taskTableTheme.tooltip}> {/* Aplica estilos personalizados */}
+                    <IconButton sx={taskTableTheme.editIconButton} onClick={() => {
                         getTask(row.id);
-                        handleOpenModalEdit()
+                        handleOpenModalEdit();
                     }}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>
 
-                {
-                    user.isAdmin?
-                    <Tooltip title="Delete">
-                    <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>:null
-                }
+                {user.isAdmin ? (
+                    <Tooltip title="Delete" sx={taskTableTheme.tooltip}> {/* Aplica estilos personalizados */}
+                        <IconButton
+                            sx={taskTableTheme.deleteIconButton}
+                            onClick={() => openDeleteConfirmModal(row)}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                ) : null}
             </Box>
         ),
-    })
+    });
+
     return (
-        <Box >
-            <Box sx={{ m: 4 }} >
-                <MaterialReactTable table={table} />
-            </Box>
+        <Box sx={taskTableTheme.tableContainer}> {/* Aplica estilos personalizados */}
+            <MaterialReactTable table={table} />
 
             <ModalCreateTask
                 open={openModalCreate}
@@ -271,7 +263,6 @@ export default function TaskTable() {
                 task={task}
                 handleEditTask={handleEditTask}
             />
-
         </Box>
-    )
+    );
 }

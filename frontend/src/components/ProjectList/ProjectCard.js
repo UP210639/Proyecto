@@ -8,60 +8,60 @@ import { GoPencil } from "react-icons/go";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import ModalEditProject from './ModalEditProject';
+import projectCardTheme from './EstilosProjectCard'; // Importa el tema personalizado
 
-const ProjectCard = ({ data, deleteProject, openModal, handleCloseModal, handleOpenModal, users, project, getProject, handleEditProject}) => {
-    const user=JSON.parse(localStorage.getItem("user"))
-    return (
-        <React.Fragment>
-            {data?.map((project) => (
-                <Card variant="outlined" key={project.id}
-                    sx={{
-                        border: 'solid #BDB7B4',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '250px',
-                        minHeight: '250px',
-                        justifyContent: 'space-between'
-                    }}>
-                    <Link to={"/tasks/"+project.id} style={{ textDecoration: "none", color: "black" }}>
-                        <CardContent>
-                            <Typography variant="h5" component="div" align='center' padding='10px 0px 15px 0px'>
-                                {project.name}
-                            </Typography>
-                            <Typography variant="h7" component="div" align='left'>
-                                {project.description}
-                            </Typography>
-                        </CardContent>
-                    </Link>
-                    {user.isAdmin ?
+const ProjectCard = ({ data, deleteProject, openModal, handleCloseModal, handleOpenModal, users, project, getProject, handleEditProject }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
 
-                        <CardActions >
-                        <IconButton size="medium" onClick={()=>{
-                            getProject(project.id);
-                            handleOpenModal()}
-                        }>
-                            <GoPencil />
-                        </IconButton>
-                        <IconButton size="medium" onClick={() => deleteProject(project.id, project.name)}>
-                            <FaRegTrashCan />
-                        </IconButton>
-                    </CardActions>:
-                    null
-                    }
-                </Card>
-            ))}
+  return (
+    <React.Fragment>
+      {data?.map((project) => (
+        <Card variant="outlined" key={project.id}
+          sx={projectCardTheme.card} // Aplica estilos personalizados al card
+        >
+          <Link to={"/tasks/" + project.id} style={{ textDecoration: "none", color: "black" }}>
+            <CardContent sx={projectCardTheme.cardContent}> {/* Aplica estilos personalizados al contenido del card */}
+              <Typography sx={projectCardTheme.cardTitle}>
+                {project.name}
+              </Typography>
+              <Typography sx={projectCardTheme.cardDescription}>
+                {project.description}
+              </Typography>
+            </CardContent>
+          </Link>
+          {user.isAdmin &&
+            <CardActions sx={projectCardTheme.cardActions}> {/* Aplica estilos personalizados a las acciones del card */}
+              <IconButton
+                size="medium"
+                sx={projectCardTheme.editIconButton} // Aplica estilos personalizados al botón de edición
+                onClick={() => {
+                  getProject(project.id);
+                  handleOpenModal()
+                }}
+              >
+                <GoPencil />
+              </IconButton>
+              <IconButton
+                size="medium"
+                sx={projectCardTheme.deleteIconButton} // Aplica estilos personalizados al botón de eliminación
+                onClick={() => deleteProject(project.id, project.name)}
+              >
+                <FaRegTrashCan />
+              </IconButton>
+            </CardActions>
+          }
+        </Card>
+      ))}
 
-            <ModalEditProject 
-                open={openModal} 
-                handleClose={handleCloseModal} 
-                users={users} 
-                project={project}
-                handleEditProject={handleEditProject}
-                />
-
-        </ React.Fragment>
-    );
+      <ModalEditProject
+        open={openModal}
+        handleClose={handleCloseModal}
+        users={users}
+        project={project}
+        handleEditProject={handleEditProject}
+      />
+    </React.Fragment>
+  );
 }
 
 export default ProjectCard;
-
