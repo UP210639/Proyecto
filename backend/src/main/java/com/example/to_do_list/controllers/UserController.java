@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("valid/{email}")
-    public User validUserByEmail(@RequestParam String email) throws ExcepcionRecursoNoEncontrado {
+    public User validUserByEmail(@PathVariable String email) throws ExcepcionRecursoNoEncontrado {
         User user = userService.getUserByEmail(email);
         return user;
     }

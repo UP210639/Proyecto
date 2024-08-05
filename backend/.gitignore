@@ -1,0 +1,109 @@
+# Directorios de construcción
+/build/
+/out/
+/target/
+
+# Archivos de Gradle
+.gradle
+/build
+
+# Archivos específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración del IDE (IntelliJ / Eclipse / NetBeans / VS Code, etc.)
+/.idea
+*.iml
+*.ipr
+*.iws
+/.vscode
+/.project
+/.classpath
+/.settings/
+/bin/
+/nbproject/private/
+
+# Archivos de logs
+*.log
+
+# Archivos de configuración local
+*.properties
+*.xml
+*.local
+.env
+
+# Dependencias
+/lib/
+/.libs/
+/node_modules/
+/yarn.lock
+
+# Archivos generados
+*.class
+*.jar
+*.war
+*.ear
+
+# Informes de cobertura
+/coverage/
+/jacoco/
+
+# Archivos de test
+/test-output/
+/surefire-reports/
+/test-results/
+
+# Otros
+*~
+*.swp
+
+# Archivos de caché de herramientas y configuraciones de build
+.caches/
+*.lock
+.gradle/
+/.idea/
+/target/
+/out/
+/build/
+
+# Archivos de configuración del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración del IDE (IntelliJ / Eclipse / NetBeans / VS Code, etc.)
+.idea
+*.iml
+*.ipr
+*.iws
+.vscode/
+.project
+.classpath
+.settings/
+nbproject/private/
+
+# Archivos de logs
+*.log
+
+# Archivos de configuración local
+*.properties
+*.xml
+*.local
+.env
+
+# Dependencias descargadas por Gradle
+.gradle/
+/build/
+
+# Archivos de cache de Gradle
+.gradle/cache/
+/.gradle/init-script/
+/.gradle/gradle.properties
+
+# Informes de cobertura de pruebas
+/coverage/
+/jacoco/
+
+# Salida de compilación de pruebas
+/test-output/
+/surefire-reports/
+/test-results/

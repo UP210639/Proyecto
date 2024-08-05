@@ -75,7 +75,7 @@ export default function Login() {
     const password = data.get('password');
 
       fetch("http://localhost:8080/users/valid/"+email,{
-          
+          method:"GET"
         
       }).then((res)=>{
 

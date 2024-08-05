@@ -20,7 +20,7 @@ const style = {
 };
 
 const ModalEditProject = ({ open, handleClose, users, project, handleEditProject }) => {
-
+    const user=JSON.parse(localStorage.getItem("user"))
     const [values, setValues] = useState({
         id:'',
         name: '',

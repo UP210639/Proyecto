@@ -47,15 +47,17 @@ public class ProjectController {
         return projectService.getProjectById(id);
     }
 
+    @GetMapping("/user/{id}")
+    public List<ProjectDTO> getProjecctByUserID(@PathVariable Integer id) {
+        return projectService.getProjectsByUserId(id);
+    }
+
     @PostMapping
     public ProjectDTO createProject(@RequestBody @Valid  ProjectDTO projectDTO) {
         return projectService.createProject(projectDTO);
     }
 
-    @GetMapping("/user/{id}")
-    public List<ProjectDTO> getProjecctByUserID(@PathVariable Integer id) {
-        return projectService.getProjectsByUserId(id);
-    }
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) throws ExcepcionRecursoNoEncontrado {

@@ -22,11 +22,16 @@ public class TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
-    public List<TaskDTO> getAllTasks() {
-        return taskRepository.findAll()
-                             .stream()
-                             .map(taskMapper::toDTO)
-                             .collect(Collectors.toList());
+    public List<Task> getAllTasks() {
+        return taskRepository.findAll();
+                            // .stream()
+                            // .map(taskMapper::toDTO)
+                            // .collect(Collectors.toList());
+    }
+
+    public List<Task> getTasksByProject_UserId(Integer proyectId, Integer userId) {
+        return taskRepository.findByProjectId_UserId(proyectId,userId);
+                             
     }
 
     public TaskDTO getTaskById(Integer id) throws ExcepcionRecursoNoEncontrado {
@@ -68,8 +73,8 @@ public class TaskService {
         return false;
     }
 
-    public List<TaskDTO> getTasksByProjectId(Integer projectId) {
+    public List<Task> getTasksByProjectId(Integer projectId) {
         List<Task> tasks = taskRepository.findByProjectId(projectId);
-        return tasks.stream().map(taskMapper::toDTO).collect(Collectors.toList());
+        return tasks;
     }
 }

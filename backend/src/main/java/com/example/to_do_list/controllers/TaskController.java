@@ -22,7 +22,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public List<TaskDTO> getAllTasks() {
+    public List<Task> getAllTasks() {
         return taskService.getAllTasks();
     }
 
@@ -31,14 +31,21 @@ public class TaskController {
         return taskService.getTaskById(id);
     }
 
+   
+
+    @GetMapping("/project/{id}")
+    public List<Task> getTasksByProjectId(@PathVariable Integer id) {
+        return taskService.getTasksByProjectId(id);
+    }
+
+    @GetMapping("/{projectId}/{userId}")
+    public List<Task> getTasksByProject_UserId(@PathVariable Integer projectId,@PathVariable Integer userId) {
+        return taskService.getTasksByProject_UserId(projectId,userId);
+    }
+
     @PostMapping
     public TaskDTO createTask(@RequestBody @Valid TaskDTO taskDTO) {
         return taskService.createTask(taskDTO);
-    }
-
-    @GetMapping("/project/{id}")
-    public List<TaskDTO> getTasksByProjectId(@PathVariable Integer id) {
-        return taskService.getTasksByProjectId(id);
     }
     
 

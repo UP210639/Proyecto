@@ -16,11 +16,11 @@ import {
 } from '@mui/material';
 
 import theme from './EstiloTask'; // Importa los estilos desde estilostask.js
-
+const user=JSON.parse(localStorage.getItem("user"))
 export default function TaskTable() {
   const PROJECT = useParams().projectID;
   const [data, setData] = useState([]);
-  const USER = 1;
+  
   const columns = [
     {
       header: "id",
@@ -29,7 +29,7 @@ export default function TaskTable() {
     },
     {
       header: "responsable",
-      accessorFn: (row) => row.user,
+      accessorFn: (row) => row.user.firstName,
     },
     {
       header: "name",
@@ -51,13 +51,19 @@ export default function TaskTable() {
     },
     {
       header: "project_Id",
-      accessorFn: (row) => row.projectId,
+      accessorFn: (row) => row.projec.name,
       enableEditing: false,
     },
   ];
 
   const getData = () => {
-    console.log("here")
+    let link  ="http://localhost:8080/project/user/"+user.id
+
+    if(user.isAdmin){
+      link="http://localhost:8080/project"
+    } 
+
+
     fetch("http://localhost:8080/tasks/project/" + PROJECT, {
       method: "GET",
       headers: {
@@ -80,7 +86,7 @@ export default function TaskTable() {
 
   const handleCreateTask = ({ values }) => {
     console.log(values)
-    values.userId = USER;
+   
     values.projectId = PROJECT;
     values.status = "pending";
     values.dateAdd = new Date().toISOString();

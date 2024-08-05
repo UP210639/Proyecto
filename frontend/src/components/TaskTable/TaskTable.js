@@ -15,11 +15,7 @@ import ModalCreateTask from './ModalCreateTask';
 import ModalEditTask from './ModalEditTask';
 
 export default function TaskTable() {
-
-    const findUserNameById = (userId) => {
-        const user = users.find(user => user.id === userId);
-        return user ? user.firstName + " " + user.lastName : 'Unknown';
-    };
+    const user=JSON.parse(localStorage.getItem("user"))
 
     const PROJECT = useParams().projectID;
     const [data, setData] = useState([]);
@@ -35,6 +31,13 @@ export default function TaskTable() {
     const handleOpenModalEdit = () => setOpenEdit(true);
     const handleCloseModalEdit = () => setOpenEdit(false);
 
+    let link  ="http://localhost:8080/project/user/"+user.id
+
+    if(user.isAdmin){
+      link="http://localhost:8080/project"
+    } 
+
+
     const columns = [
         {
             header: "ID",
@@ -42,7 +45,7 @@ export default function TaskTable() {
         },
         {
             header: "Responsable",
-            accessorFn: (row) => findUserNameById(row.userId),
+            accessorFn: (row) => row.user.firstName,
         },
         {
             header: "Nombre",
@@ -62,12 +65,19 @@ export default function TaskTable() {
         },
         {
             header: "Proyecto",
-            accessorFn: () => project.name,
+            accessorFn: (row) => row.project.name,
         },
     ]
     const getData = () => {
 
-        fetch("http://localhost:8080/tasks/project/" + PROJECT, {  //Tareas por project id :o
+        let link  ="http://localhost:8080/tasks/"+PROJECT+"/"+user.id
+
+        if(user.isAdmin){
+          link="http://localhost:8080/tasks/project/" + PROJECT
+        } 
+    
+
+        fetch(link, {  //Tareas por project id :o
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -204,14 +214,20 @@ export default function TaskTable() {
         data: data,
         enableEditing: true,
         getRowId: (row) => row.id,
-        renderTopToolbarCustomActions: ( ) => (
-            <Button
-                variant="contained"
-                onClick={handleOpenModalCreate}
-            >
-                Create New Task
-            </Button>
-        ),
+        renderTopToolbarCustomActions: ( ) => {
+
+            if(user.isAdmin){
+                return( <Button
+                    variant="contained"
+                    onClick={handleOpenModalCreate}
+                    >
+                        Create New Task
+                    </Button>)
+
+            }else return null
+           
+    
+    },
         renderRowActions: ({ row }) => (
 
             <Box sx={{ display: 'flex', gap: '1rem' }}>
@@ -223,11 +239,15 @@ export default function TaskTable() {
                         <EditIcon />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Delete">
+
+                {
+                    user.isAdmin?
+                    <Tooltip title="Delete">
                     <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
                         <DeleteIcon />
                     </IconButton>
-                </Tooltip>
+                </Tooltip>:null
+                }
             </Box>
         ),
     })

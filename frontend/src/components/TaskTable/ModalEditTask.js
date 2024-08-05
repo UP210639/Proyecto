@@ -20,7 +20,7 @@ const style = {
 };
 
 const ModalEditTask = ({ open, handleClose, users, task, handleEditTask }) => {
-
+    const user=JSON.parse(localStorage.getItem("user"))
     const [values, setValues] = useState({
         id: '',
         name: '',
@@ -55,97 +55,107 @@ const ModalEditTask = ({ open, handleClose, users, task, handleEditTask }) => {
 
     return (
         <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-title"
-            aria-describedby="modal-description"
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
-            <Box sx={style}
-                component="form"
+          <Box sx={style} component="form">
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Editar tarea
+            </Typography>
+      
+            <Typography
+              id="modal-modal-description"
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                mt: 2,
+                gap: '30px',
+                flexDirection: 'column',
+              }}
             >
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Editar tarea
-                </Typography>
-                <Typography id="modal-modal-description"
-                    sx={{
-                        display: { xs: 'none', md: 'flex' },
-                        mt: 2,
-                        gap: "30px",
-                        flexDirection: "column"
-                    }}
+              {user.isAdmin ? (
+                <>
+                  <TextField
+                    id="task_name"
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
+                    label="Nombre del proyecto"
+                    variant="standard"
+                    sx={{ width: '100%' }}
+                  />
+                  <TextField
+                    id="task_description"
+                    name="description"
+                    value={values.description}
+                    onChange={handleChange}
+                    label="Descripción"
+                    variant="standard"
+                    multiline
+                    sx={{ width: '100%' }}
+                  />
+                  <TextField
+                    id="task_user"
+                    name="userId"
+                    value={values.userId}
+                    onChange={handleChange}
+                    select
+                    label="Responsable"
+                    variant="standard"
+                  >
+                    {users?.map((user) => (
+                      <MenuItem key={user.id} value={user.id}>
+                        {user.firstName} {user.lastName}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </>
+              ) : null}
+      
+              <TextField
+                id="task_status"
+                name="status"
+                value={values.status}
+                onChange={handleChange}
+                select
+                label="Estado"
+                variant="standard"
+              >
+                <MenuItem key={"pending"} value={"pending"}>
+                  Pendiente
+                </MenuItem>
+                <MenuItem key={"in_progress"} value={"in_progress"}>
+                  En progreso
+                </MenuItem>
+                <MenuItem key={"completed"} value={"completed"}>
+                  Completado
+                </MenuItem>
+              </TextField>
+      
+              <Box sx={{ display: 'flex', gap: '20px' }}>
+                <Button
+                  variant="contained"
+                  sx={{ mt: 2 }}
+                  onClick={() => {
+                    if (task) {
+                      handleEditTask(values);
+                      handleClose();
+                    }
+                  }}
                 >
-                    <TextField
-                        id="task_name"
-                        name='name'
-                        value={values.name}
-                        onChange={handleChange}
-                        label="Nombre del proyecto"
-                        variant="standard"
-                        sx={{ width: "100%" }}
-                    />
-                    <TextField
-                        id="task_description"
-                        name='description'
-                        value={values.description}
-                        onChange={handleChange}
-                        label="Descripción"
-                        variant="standard"
-                        multiline
-                        sx={{ width: "100%" }}
-                    />
-                    <TextField
-                        id="task_user"
-                        name='userId'
-                        value={values.userId}
-                        onChange={handleChange}
-                        select
-                        label="Responsable"
-                        variant="standard"
-                    >
-                        {users?.map((user) => (
-                            <MenuItem key={user.id} value={user.id}>
-                                {user.firstName} {user.lastName}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-
-                    <TextField
-                        id="task_status"
-                        name='status'
-                        value={values.status}
-                        onChange={handleChange}
-                        select
-                        label="Responsable"
-                        variant="standard"
-                    >
-                        <MenuItem key={"pending"} value={"pending"}>
-                            Pendiente
-                        </MenuItem>
-                        <MenuItem key={"in_progress"} value={"in_progress"}>
-                            En progreso
-                        </MenuItem>
-                        <MenuItem key={"completed"} value={"completed"}>
-                            Completado
-                        </MenuItem>
-                    </TextField>
-
-                    <Box sx={{ display: "flex", gap: "20px" }}>
-                        <Button variant='contained' sx={{ mt: 2 }} onClick={() => {
-                            if (task) {
-                                handleEditTask(values);
-                                handleClose();
-                            }
-                        }}>
-                            Guardar
-                        </Button>
-                        <Button variant='contained' sx={{ mt: 2 }} onClick={handleClose}>
-                            Descartar
-                        </Button >
-                    </Box>
-                </Typography>
-            </Box>
+                  Guardar
+                </Button>
+                <Button variant="contained" sx={{ mt: 2 }} onClick={handleClose}>
+                  Descartar
+                </Button>
+              </Box>
+            </Typography>
+          </Box>
         </Modal>
-    );
+      );
+
+      
 }
 
 export default ModalEditTask;
