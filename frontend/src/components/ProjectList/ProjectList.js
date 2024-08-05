@@ -23,10 +23,10 @@ const ProjectList = () => {
   const handleCloseModalEdit = () => setOpenEdit(false);
 
   const getData = () => {
-    let link = "http://localhost:8080/project/user/" + user.id;
+    let link = "http://143.198.60.20:8080/project/user/" + user.id;
 
     if (user.isAdmin) {
-      link = "http://localhost:8080/project";
+      link = "http://143.198.60.20:8080/project";
     }
 
     fetch(link, {
@@ -45,7 +45,7 @@ const ProjectList = () => {
   }
 
   const getProject = (id) => {
-    fetch("http://localhost:8080/project/" + id, {
+    fetch("http://143.198.60.20:8080/project/" + id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ const ProjectList = () => {
   }
 
   const getUsers = () => {
-    fetch("http://localhost:8080/users/get", {
+    fetch("http://143.198.60.20:8080/users/get", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +83,7 @@ const ProjectList = () => {
   };
 
   function handleDeleteProject(projectId) {
-    fetch("http://localhost:8080/project/" + projectId, {
+    fetch("http://143.198.60.20:8080/project/" + projectId, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +98,7 @@ const ProjectList = () => {
   }
 
   const handleCreateProject = (values) => {
-    fetch("http://localhost:8080/project", {
+    fetch("http://143.198.60.20:8080/project", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -114,7 +114,7 @@ const ProjectList = () => {
   }
 
   const handleEditProject = (values) => {
-    fetch("http://localhost:8080/project/" + values.id, {
+    fetch("http://143.198.60.20:8080/project/" + values.id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

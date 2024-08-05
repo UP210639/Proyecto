@@ -32,10 +32,10 @@ export default function TaskTable() {
     const handleOpenModalEdit = () => setOpenEdit(true);
     const handleCloseModalEdit = () => setOpenEdit(false);
 
-    let link = "http://localhost:8080/project/user/" + user.id;
+    let link = "http://143.198.60.20:8080/project/user/" + user.id;
 
     if (user.isAdmin) {
-        link = "http://localhost:8080/project";
+        link = "http://143.198.60.20:8080/project";
     }
 
     const columns = [
@@ -70,10 +70,10 @@ export default function TaskTable() {
     ];
 
     const getData = () => {
-        let link = "http://localhost:8080/tasks/" + PROJECT + "/" + user.id;
+        let link = "http://143.198.60.20:8080/tasks/" + PROJECT + "/" + user.id;
 
         if (user.isAdmin) {
-            link = "http://localhost:8080/tasks/project/" + PROJECT;
+            link = "http://143.198.60.20:8080/tasks/project/" + PROJECT;
         }
 
         fetch(link, {  //Tareas por project id
@@ -92,7 +92,7 @@ export default function TaskTable() {
     };
 
     const getUsers = () => {
-        fetch("http://localhost:8080/users/get", {  //Obtener usuarios
+        fetch("http://143.198.60.20:8080/users/get", {  //Obtener usuarios
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -108,7 +108,7 @@ export default function TaskTable() {
     };
 
     const getProject = () => {
-        fetch("http://localhost:8080/project/" + PROJECT, {  //Obtener proyecto
+        fetch("http://143.198.60.20:8080/project/" + PROJECT, {  //Obtener proyecto
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export default function TaskTable() {
     };
 
     const getTask = (id) => {
-        fetch("http://localhost:8080/tasks/" + id, {  //Obtener tarea
+        fetch("http://143.198.60.20:8080/tasks/" + id, {  //Obtener tarea
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -152,7 +152,7 @@ export default function TaskTable() {
         values.status = "pending"; //Valores posibles según base de datos
         values.dateAdd = new Date().toISOString();
 
-        fetch("http://localhost:8080/tasks", {
+        fetch("http://143.198.60.20:8080/tasks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -172,7 +172,7 @@ export default function TaskTable() {
     };
 
     const handleEditTask = (values) => {
-        fetch("http://localhost:8080/tasks/" + values.id, {
+        fetch("http://143.198.60.20:8080/tasks/" + values.id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -188,7 +188,7 @@ export default function TaskTable() {
     };
 
     const handleDeleteTask = (taskId) => {
-        fetch("http://localhost:8080/tasks/" + taskId, {
+        fetch("http://143.198.60.20:8080/tasks/" + taskId, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

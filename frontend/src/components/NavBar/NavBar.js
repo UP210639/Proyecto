@@ -47,10 +47,10 @@ function useProjects() {
 
         console.log("User Data:", user);
 
-        let link = `http://localhost:8080/project/user/${user.id}`;
+        let link = `http://143.198.60.20:8080/project/user/${user.id}`;
 
         if (user.isAdmin) {
-          link = "http://localhost:8080/project";
+          link = "http://143.198.60.20:8080/project";
         }
 
         const response = await fetch(link);

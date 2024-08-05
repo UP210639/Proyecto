@@ -95,7 +95,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/users/valid/${email}`, {
+      const response = await fetch(`http://143.198.60.20:8080/users/valid/${email}`, {
         method: "GET"
       });
 
